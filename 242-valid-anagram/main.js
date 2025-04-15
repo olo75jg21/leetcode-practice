@@ -6,40 +6,34 @@
  * @return {boolean}
  */
 
-function getChars(s) {
-  const charsMap = {}
+function stringToCharsMap(str) {
+  const charsMap = new Map()
 
-  for (const char of s) {
-    if (!charsMap[char]) {
-      charsMap[char] = 1
-    } else {
-      charsMap[char] += 1
+  for (const char of str) {
+    if (charsMap.has(char)) {
+      const currentOccurancesAmount = charsMap.get(char)
+      charsMap.set(char, currentOccurancesAmount + 1)
+      continue
     }
+    charsMap.set(char, 1)
   }
 
   return charsMap
 }
 
-var isAnagram = function (s, t) {
-  const sMap = getChars(s)
-  const tMap = getChars(t)
+function validAnagram(s, t) {
+  if (s.length !== t.length) return false
 
-  const sKeys = Object.keys(sMap)
-  const tKeys = Object.keys(tMap)
+  const sCharsMap = stringToCharsMap(s)
+  const tCharsMap = stringToCharsMap(t)
 
-  if (sKeys.length !== tKeys.length) {
-    return false
-  }
-
-  for (const key of sKeys) {
-    console.log(sMap[key])
-    console.log(tMap[key])
-    if (sMap[key] !== tMap[key]) {
+  for (const [key, value] of sCharsMap) {
+    if (sCharsMap.get(key) !== tCharsMap.get(key)) {
       return false
     }
   }
 
   return true
-};
+}
 
-isAnagram("anagram", "nagaram")
+console.log(validAnagram('anagram', 'nagaram'))
